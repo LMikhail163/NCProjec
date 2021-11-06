@@ -29,7 +29,7 @@ let score = 0;
 pipeBottom.onload = draw;
 
 // Расстояние между трубами 
-const gap = 90;
+const gap = 130;
 
 // Полет птички 
 document.addEventListener('keydown', moveUp);
