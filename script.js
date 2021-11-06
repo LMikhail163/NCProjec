@@ -1,6 +1,6 @@
-
 const canvas = document.getElementById('canvas');
 const content = canvas.getContext('2d');
+const btn = document.querySelector('button');
 
 const bird = new Image();
 const bg = new Image();
@@ -20,7 +20,7 @@ fly.src = "audio/fly.mp3";
 scoreAudio.src = "audio/score.mp3";
 
 // Позиция птички 
-const xPos = 10;
+let xPos = 10;
 let yPos = 150;
 let grav = 1.5;
 
@@ -44,10 +44,14 @@ pipe[0] = {
     y: 0
 };
 
+// reset 
+function reset() {
+    
+}
+
 // Прорисовка 
 function draw() {
     content.drawImage(bg, 0, 0);
-
     for (let i = 0; i < pipe.length; i++) {
         content.drawImage(pipeUp, pipe[i].x, pipe[i].y);
         content.drawImage(pipeBottom, pipe[i].x, pipe[i].y + pipeUp.height + gap);
@@ -58,12 +62,14 @@ function draw() {
             pipe.push({
                 x: canvas.width,
                 y: Math.floor(Math.random() * pipeUp.height) - pipeUp.height
+                
             });
         }
 
         if(xPos + bird.width >= pipe[i].x && xPos <= pipe[i].x + pipeUp.width && (yPos <= pipe[i].y + pipeUp.height || yPos + bird.height >= pipe[i].y + pipeUp.height + gap) || yPos + bird.height >= canvas.height - fg.height) {
-            location.reload(); // Перезагрузка страницы
-            
+            content.fillText('Game over', 70, canvas.height - 220);
+            fly.pause();
+            break;
         }
 
         if(pipe[i].x === 5) {
