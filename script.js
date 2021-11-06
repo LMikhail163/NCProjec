@@ -10,7 +10,6 @@ const pipeBottom = new Image();
 
 const fly = new Audio();
 const scoreAudio = new Audio();
-
 bird.src = "img/bird.png";
 bg.src = "img/bg.png";
 fg.src = "img/fg.png";
@@ -26,10 +25,13 @@ let grav = 1.5;
 
 let score = 0;
 
+// Прорисовка после того, как загрузится нижняя труба(последний элемент)
+pipeBottom.onload = draw;
+
 // Расстояние между трубами 
 const gap = 90;
 
-// Полет пртички 
+// Полет птички 
 document.addEventListener('keydown', moveUp);
 
 function moveUp() {
@@ -44,14 +46,10 @@ pipe[0] = {
     y: 0
 };
 
-// reset 
-function reset() {
-    
-}
-
 // Прорисовка 
 function draw() {
     content.drawImage(bg, 0, 0);
+    content.drawImage(fg, 0, canvas.height - fg.height);
     for (let i = 0; i < pipe.length; i++) {
         content.drawImage(pipeUp, pipe[i].x, pipe[i].y);
         content.drawImage(pipeBottom, pipe[i].x, pipe[i].y + pipeUp.height + gap);
@@ -67,9 +65,9 @@ function draw() {
         }
 
         if(xPos + bird.width >= pipe[i].x && xPos <= pipe[i].x + pipeUp.width && (yPos <= pipe[i].y + pipeUp.height || yPos + bird.height >= pipe[i].y + pipeUp.height + gap) || yPos + bird.height >= canvas.height - fg.height) {
-            content.fillText('Game over', 70, canvas.height - 220);
+            content.fillText('Game over. Score: ' + score, 20, canvas.height - 220);
             fly.pause();
-            break;
+            cancelAnimationFrame();
         }
 
         if(pipe[i].x === 5) {
@@ -78,16 +76,11 @@ function draw() {
         }
     }
     content.drawImage(bird, xPos, yPos);
-    content.drawImage(fg, 0, canvas.height - fg.height);
-
     yPos += grav;
 
     content.fillStyle = "#000";
     content.font = "24px Verdana";
-    content.fillText("Счет: " + score, 10, canvas.height - 20);
+    content.fillText("Score: " + score, 10, canvas.height - 20);
 
     requestAnimationFrame(draw);
 }
-
-// Прорисовка после того, как загрузится нижняя труба(последний элемент)
-pipeBottom.onload = draw;
